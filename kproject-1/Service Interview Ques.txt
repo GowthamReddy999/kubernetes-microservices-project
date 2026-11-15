@@ -1,0 +1,28 @@
+⭐ Interview Questions
+Q1. What is a Kubernetes Service?
+
+A Kubernetes Service provides a stable network endpoint to access a group of Pods and distributes traffic to the Pods selected by its selector.
+
+Q2. Why do we need a Service?
+
+Pods are ephemeral. Their IP addresses can change when Pods are recreated. A Service provides a stable IP/DNS name for accessing the application.
+
+Q3. How does Service find Pods?
+
+A Service uses labels and selectors to identify the Pods that should receive traffic.
+
+Q4. What are the main Service types?
+
+ClusterIP, NodePort, LoadBalancer, and ExternalName.
+
+Q5. What is ClusterIP?
+
+ClusterIP is the default Service type. It exposes the application internally within the Kubernetes cluster.
+
+Q6. What is NodePort?
+
+NodePort exposes a Service through a port on each Node, allowing traffic from outside the cluster to reach the Service.
+
+Q7. What is LoadBalancer?
+
+LoadBalancer exposes a Service externally using a cloud provider's load balancer, such as an AWS load balancer.

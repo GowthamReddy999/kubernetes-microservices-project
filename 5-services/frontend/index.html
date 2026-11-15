@@ -1,0 +1,161 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Kubernetes Shopping App</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 40px; }
+    button { margin: 5px; padding: 10px 16px; cursor: pointer; }
+    #result { margin-top: 20px; padding: 15px; border: 1px solid #ccc; min-height: 25px; }
+  </style>
+</head>
+<body>
+  <h1>My Kubernetes Shopping App</h1>
+  <p>Frontend → Nginx → Java Spring Boot microservices</p>
+
+  <button onclick="callService('/api/users')">User Service</button>
+  <button onclick="callService('/api/products')">Product Service</button>
+  <button onclick="callService('/api/orders')">Order Service</button>
+  <button onclick="callService('/api/payments')">Payment Service</button>
+
+  <div id="result">Click a service button...</div>
+
+  <script>
+    async function callService(path) {
+      const result = document.getElementById("result");
+      result.innerText = "Calling " + path + "...";
+
+      try {
+        const response = await fetch(path);
+        const text = await response.text();
+
+        if (!response.ok) {
+          throw new Error("HTTP " + response.status + ": " + text);
+        }
+
+        result.innerText = text;
+      } catch (error) {
+        result.innerText = "Request failed: " + error.message;
+      }
+    }
+  </script>
+</body>
+</html> -->
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kubernetes Shopping App</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 40px;
+            background: #f5f5f5;
+            text-align: center;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+        }
+
+        button {
+            padding: 12px 20px;
+            margin: 8px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            background: #333;
+            color: white;
+        }
+
+        button:hover {
+            background: #555;
+        }
+
+        #result {
+            margin-top: 25px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            background: #fafafa;
+            min-height: 50px;
+            text-align: left;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>🛒 Kubernetes Shopping App</h1>
+
+    <p>Select a microservice:</p>
+
+    <button onclick="callService('/api/users')">
+        Users
+    </button>
+
+    <button onclick="callService('/api/products')">
+        Products
+    </button>
+
+    <button onclick="callService('/api/orders')">
+        Orders
+    </button>
+
+    <button onclick="callService('/api/payments')">
+        Payments
+    </button>
+
+    <div id="result">
+        Result will appear here...
+    </div>
+
+</div>
+
+<script>
+
+async function callService(endpoint) {
+
+    const result = document.getElementById("result");
+
+    result.innerText = "Loading...";
+
+    try {
+
+        const response = await fetch(endpoint);
+
+        if (!response.ok) {
+            throw new Error("HTTP Error: " + response.status);
+        }
+
+        const data = await response.text();
+
+        result.innerText = data;
+
+    } catch (error) {
+
+        result.innerText = "❌ Error: " + error.message;
+
+    }
+}
+
+</script>
+
+</body>
+</html>

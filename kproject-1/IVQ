@@ -1,0 +1,5 @@
+Explain the Kubernetes Architecture.
+
+Answer (1 minute):
+
+Kubernetes has two main parts: the Control Plane and Worker Nodes. The Control Plane includes the API Server, etcd, Scheduler, and Controller Manager. The API Server receives all requests, etcd stores the cluster state, the Scheduler selects the best worker node for Pods, and the Controller Manager ensures the desired state is maintained. Each Worker Node contains Kubelet, Kube-proxy, a container runtime like containerd, and the application Pods. Kubelet communicates with the Control Plane, Kube-proxy manages networking, and the container runtime creates and runs containers.

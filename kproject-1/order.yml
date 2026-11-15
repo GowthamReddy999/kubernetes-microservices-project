@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+
+kind: Deployment
+
+metadata:
+  name: order-service
+  labels:
+    app: order
+
+spec:
+  replicas: 2
+
+  selector:
+    matchLabels:
+      app: order
+
+  template:
+    metadata:
+      labels:
+        app: order
+
+    spec:
+      containers:
+        - name: order
+          image: kubernetes-5-services-order-service:latest
+          imagePullPolicy: Never
+
+          ports:
+            - containerPort: 8080
+
+
+
+---       # YAML document separator.
+
+
+apiVersion: v1
+
+kind: Service
+
+metadata:
+  name: order-service
+
+spec:
+  type: LoadBalancer
+
+  selector:
+    app: order
+
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080
