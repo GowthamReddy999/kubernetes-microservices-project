@@ -1,0 +1,107 @@
+################################################################
+before running install these commands in vms
+################################################################
+#Step 1 — Install Kubernetes packages on all three VMs
+#If you already completed the installation script I provided earlier, skip this step.
+
+#Otherwise, run on Master, Slave-1 and Slave-2:
+sudo apt update
+sudo apt install -y kubeadm kubelet kubectl
+sudo apt-mark hold kubeadm kubelet kubectl
+
+kubeadm version
+
+###############################################################
+install only in master-node
+###############################################################
+
+#Step 2 — Initialize Kubernetes master
+#Master VM only
+#First verify the container runtime:
+sudo systemctl is-active containerd
+kubeadm version -o short
+
+
+#If containerd is active and kubeadm reports v1.37.x, run:
+sudo kubeadm init \
+  --pod-network-cidr=10.244.0.0/16 \
+  --cri-socket=unix:///run/containerd/containerd.sock
+
+
+#Once initialization succeeds:
+mkdir -p $HOME/.kube
+
+sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+
+sudo chown $(id -u):$(id -g) $HOME/.kube/config
+
+
+#Check:
+kubectl get nodes
+
+#########################################################
+step-3
+##########################################################
+
+# Install Calico CRDs
+kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.33.0/manifests/v3_projectcalico_org.yaml
+
+# Install Tigera Operator
+kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.33.0/manifests/tigera-operator.yaml
+
+# Download Calico configuration
+curl -O https://raw.githubusercontent.com/projectcalico/calico/v3.33.0/manifests/custom-resources.yaml
+
+# Change default Pod CIDR to your cluster CIDR
+sed -i 's#192.168.0.0/16#10.244.0.0/16#' custom-resources.yaml
+
+# Verify CIDR
+grep -n "cidr:" custom-resources.yaml
+
+# Apply Calico
+kubectl create -f custom-resources.yaml
+
+# Monitor installation
+watch kubectl get tigerastatus
+
+
+
+#######################################################################
+installing kubeaudit for security
+#######################################################################
+
+
+# Download kubeaudit v0.22.2
+wget https://github.com/Shopify/kubeaudit/releases/download/v0.22.2/kubeaudit_0.22.2_linux_amd64.tar.gz
+
+# Extract
+tar -xzf kubeaudit_0.22.2_linux_amd64.tar.gz
+
+# Install binary
+sudo mv kubeaudit /usr/local/bin/kubeaudit
+
+# Make executable
+sudo chmod +x /usr/local/bin/kubeaudit
+
+# Verify installation
+kubeaudit version
+
+
+#############################################################
+very useful commands 
+#############################################################
+
+
+#------------------Useful commands------------------------#
+
+# Private IP address
+hostname -I
+
+# IPv4 addresses
+ip -4 addr
+
+# Public IP address (AWS EC2)
+curl -4 https://checkip.amazonaws.com
+
+# Hostname
+hostname
